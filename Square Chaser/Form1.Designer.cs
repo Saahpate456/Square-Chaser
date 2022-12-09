@@ -68,6 +68,7 @@
             // winLabel
             // 
             this.winLabel.AutoSize = true;
+            this.winLabel.BackColor = System.Drawing.Color.Black;
             this.winLabel.Location = new System.Drawing.Point(238, 156);
             this.winLabel.Name = "winLabel";
             this.winLabel.Size = new System.Drawing.Size(0, 13);

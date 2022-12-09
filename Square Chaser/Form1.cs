@@ -17,26 +17,23 @@ namespace Square_Chaser
         Rectangle player2 = new Rectangle(450, 150, 20, 20);
 
         //Powerups
-        Rectangle speedOrb = new Rectangle();
-        Rectangle slowOrb = new Rectangle();
-        Rectangle point = new Rectangle();
+        Rectangle speedOrb = new Rectangle(200,400,10,10);
+        Rectangle doomOrb = new Rectangle(400,100,10,10);
+        Rectangle point = new Rectangle(40,300,10,10);
+
+        //ball code
+        Rectangle ball = new Rectangle(295, 195, 20, 20);
+        int ballXSpeed = -6;
+        int ballYSpeed = 6;
 
         //Random
         Random spaceRandom = new Random();
-        //int xRandom = 0;
-        //int yRandom = 0;
-
-
 
         int player1Score = 0;
         int player2Score = 0;
 
         int player1Speed = 7;
         int player2Speed = 7;
-
-        ////Ball speed is for extra edition
-        //int ballXSpeed = -2;
-        //int ballYSpeed = 2;
 
         bool wDown = false;
         bool sDown = false;
@@ -126,18 +123,35 @@ namespace Square_Chaser
         }
         private void gameTimer_Tick(object sender, EventArgs e)
         {
-            
-
-            //g.Clear(Color.White);
-            //g.DrawLine(borderTop, 40, 40, 100, 40);
-
             Random spaceRandom = new Random();
 
-            //int xRandom = spaceRandom.Next(1, 600);
-            //int yRandom = spaceRandom.Next(1, 450);
-            //Rectangle slowOrb = new Rectangle(xRandom, yRandom, 7, 7);
+            //move ball 
+            ball.X += ballXSpeed;
+            ball.Y += ballYSpeed;
 
-            
+            //check if ball hit top or bottom wall and change direction if it does 
+            if (ball.Y < 0 || ball.Y > this.Height - ball.Height)
+            {
+                ballYSpeed *= -1;
+            }
+
+            //check if ball colides with wall
+            if (ball.X <= 0 && ball.X < 600 && ball.Y >= 0)
+            {
+                int xRandom = spaceRandom.Next(1, 600);
+                int yRandom = spaceRandom.Next(1, 450);
+                
+                ball.X = xRandom;
+                ball.Y = yRandom;
+            }
+            if (ball.Y <= 600 && ball.Y > 0 && ball.X >= 600)
+            {
+                int xRandom = spaceRandom.Next(1, 600);
+                int yRandom = spaceRandom.Next(1, 450);
+                
+                ball.X = xRandom;
+                ball.Y = yRandom;
+            }
 
             //move player 1 
             if (wDown == true && player1.Y > 0)
@@ -200,16 +214,17 @@ namespace Square_Chaser
             }
 
 
-
+            //Player 1 powerups
             //Point powerup
             if (player1.IntersectsWith(point))
             {
                 
                 player1Score = player1Score + 1;
                 player1scoreOutput.Text = $"{player1Score}";
+                //clear the drawing
                 int xRandom = spaceRandom.Next(1, 600);
                 int yRandom = spaceRandom.Next(1, 450);
-                Rectangle point = new Rectangle(xRandom, yRandom, 7, 7);
+                point = new Rectangle(xRandom, yRandom, 7, 7);
 
             }
 
@@ -219,16 +234,57 @@ namespace Square_Chaser
                 player1Speed = player1Speed + 1;
                 int xRandom = spaceRandom.Next(1, 600);
                 int yRandom = spaceRandom.Next(1, 450);
-                Rectangle speedOrb = new Rectangle(xRandom, yRandom, 7, 7);
+                speedOrb = new Rectangle(xRandom, yRandom, 7, 7);
             }
 
             //Slow powerup
-            if (player1.IntersectsWith(slowOrb))
+            if (player1.IntersectsWith(doomOrb))
             {
                 player1Speed = player1Speed - 1;
                 int xRandom = spaceRandom.Next(1, 600);
                 int yRandom = spaceRandom.Next(1, 450);
-                Rectangle slowOrb = new Rectangle(xRandom, yRandom, 7, 7);
+                doomOrb = new Rectangle(xRandom, yRandom, 7, 7);
+            }
+
+            //Player 2 powerups
+            //Point powerup
+            if (player2.IntersectsWith(point))
+            {
+
+                player2Score = player2Score + 1;
+                player2scoreOutput.Text = $"{player2Score}";
+                int xRandom = spaceRandom.Next(1, 600);
+                int yRandom = spaceRandom.Next(1, 450);
+                point = new Rectangle(xRandom, yRandom, 7, 7);
+
+            }
+
+            //speed powerup
+            if (player2.IntersectsWith(speedOrb))
+            {
+                player2Speed = player2Speed + 1;
+                int xRandom = spaceRandom.Next(1, 600);
+                int yRandom = spaceRandom.Next(1, 450);
+                speedOrb = new Rectangle(xRandom, yRandom, 7, 7);
+            }
+
+            //Slow powerup
+            if (player2.IntersectsWith(doomOrb))
+            {
+                player2Speed = player2Speed - 1;
+                int xRandom = spaceRandom.Next(1, 600);
+                int yRandom = spaceRandom.Next(1, 450);
+                doomOrb = new Rectangle(xRandom, yRandom, 7, 7);
+            }
+
+            //check for player speed dropping under 1
+            if (player1Speed < 1)
+            {
+                winLabel.Text = $"player 2 wins to speed";
+            }
+            if (player2Speed < 1)
+            {
+                winLabel.Text = $"player 1 wins to speed";
             }
 
 
@@ -255,8 +311,9 @@ namespace Square_Chaser
             e.Graphics.FillRectangle(blueBrush, player1);
             e.Graphics.FillRectangle(blueBrush, player2);
             e.Graphics.FillRectangle(orangeBrush, point);
-            e.Graphics.FillRectangle(redBrush, slowOrb);
+            e.Graphics.FillRectangle(redBrush, doomOrb);
             e.Graphics.FillRectangle(yellowBrush, speedOrb);
+            e.Graphics.FillRectangle(redBrush, ball);
 
         }
 
