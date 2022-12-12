@@ -21,20 +21,32 @@ namespace Square_Chaser
         Rectangle doomOrb = new Rectangle(400,100,10,10);
         Rectangle point = new Rectangle(40,300,10,10);
 
+        //powerup speed
+        int powerupXspeed = 4;
+        int powerupYspeed = 4;
+
         //ball code
-        Rectangle ball = new Rectangle(295, 195, 20, 20);
+        Rectangle ball = new Rectangle(295, 195, 25, 25);
+        Rectangle ball2 = new Rectangle(195, 195, 25, 25);
         int ballXSpeed = -6;
         int ballYSpeed = 6;
 
+        int curveball;
+
         //Random
         Random spaceRandom = new Random();
+        Random rand = new Random();
 
-        int player1Score = 0;
-        int player2Score = 0;
+        //Score
+        int player1Score = 1;
+        int player2Score = 1;
 
+
+        //Player speeds
         int player1Speed = 7;
         int player2Speed = 7;
 
+        //movement keys
         bool wDown = false;
         bool sDown = false;
         bool upArrowDown = false;
@@ -45,6 +57,11 @@ namespace Square_Chaser
         bool leftDown = false;
         bool rightDown = false;
 
+        //surpise
+        bool supriseP1 = false;
+        bool supriseP2 = false;
+
+        //paint
         SolidBrush blueBrush = new SolidBrush(Color.DodgerBlue);
         SolidBrush whiteBrush = new SolidBrush(Color.White);
         SolidBrush orangeBrush = new SolidBrush(Color.Orange);
@@ -88,6 +105,14 @@ namespace Square_Chaser
                 case Keys.A:
                     aDown = false;
                     break;
+                //Player 1 Ability
+                case Keys.R:
+                    supriseP1 = false;
+                    break;
+                //Player 2 Ability
+                case Keys.M:
+                    supriseP2 = false;
+                    break;
             }
         }
 
@@ -119,11 +144,22 @@ namespace Square_Chaser
                 case Keys.A:
                     aDown = true;
                     break;
+                //Player 1 Ability
+                case Keys.R:
+                    supriseP1 = true;
+                    break;
+                //Player 2 Ability
+                case Keys.M:
+                    supriseP2 = true;
+                    break;
             }
         }
         private void gameTimer_Tick(object sender, EventArgs e)
         {
             Random spaceRandom = new Random();
+            //check player score
+            player1scoreOutput.Text = $"{player1Score}";
+            player2scoreOutput.Text = $"{player2Score}";
 
             //move ball 
             ball.X += ballXSpeed;
@@ -135,7 +171,7 @@ namespace Square_Chaser
                 ballYSpeed *= -1;
             }
 
-            //check if ball colides with wall
+            //check if ball collides with wall
             if (ball.X <= 0 && ball.X < 600 && ball.Y >= 0)
             {
                 int xRandom = spaceRandom.Next(1, 600);
@@ -143,6 +179,8 @@ namespace Square_Chaser
                 
                 ball.X = xRandom;
                 ball.Y = yRandom;
+
+                ballXSpeed *= -1;
             }
             if (ball.Y <= 600 && ball.Y > 0 && ball.X >= 600)
             {
@@ -151,6 +189,147 @@ namespace Square_Chaser
                 
                 ball.X = xRandom;
                 ball.Y = yRandom;
+
+                ballXSpeed *= -1;
+            }
+            if (ball.Y <600 && ball.Y > 450)
+            {
+                int xRandom = spaceRandom.Next(1, 600);
+                int yRandom = spaceRandom.Next(1, 450);
+
+                ball.X = xRandom;
+                ball.Y = yRandom;
+
+                ballXSpeed *= -1;
+            }
+
+            //check if ball collides with a player
+            if (ball.IntersectsWith(player1))
+            {
+                player1Score = player1Score - 1;
+                int xRandom = spaceRandom.Next(1, 600);
+                int yRandom = spaceRandom.Next(1, 450);
+
+                ball.X = xRandom;
+                ball.Y = yRandom;
+
+                ballXSpeed *= -1;
+            }
+            if (ball.IntersectsWith(player2))
+            {
+                player2Score = player2Score - 1;
+                int xRandom = spaceRandom.Next(1, 600);
+                int yRandom = spaceRandom.Next(1, 450);
+
+                ball.X = xRandom;
+                ball.Y = yRandom;
+
+                ballXSpeed *= -1;
+            }
+
+
+            //check if ball collides with a powerup
+
+
+            //ball random curve
+            int curveball = rand.Next(1, 7);
+            if (curveball > 1 && curveball < 3)
+            {
+                if (ball.X < 50 || ball.X > this.Height - ball.Width)
+                {
+                    ballYSpeed *= -1;
+                }
+            }
+            //Ball player 1 control
+            if (supriseP1 == true)
+            {
+                int curveballP1 = rand.Next(1, 7);
+                if (curveball > 1 && curveball < 6)
+                {
+                    if (ball.X < 50 || ball.X > this.Height - ball.Width)
+                    {
+                        ballYSpeed *= -1;
+                    }
+                }
+            }
+
+            //Ball player 2 control
+            if (supriseP2 == true)
+            {
+                int curveballP2 = rand.Next(1, 7);
+                if (curveball > 1 && curveball < 6)
+                {
+                    if (ball.X < 50 || ball.X > this.Height - ball.Width)
+                    {
+                        ballYSpeed *= -1;
+                    }
+                }
+            }
+            ////Player 2 ball
+            //move ball 
+            ball2.X += ballXSpeed;
+            ball2.Y += ballYSpeed;
+
+            //check if ball hit top or bottom wall and change direction if it does 
+            if (ball2.Y < 0 || ball2.Y > this.Height - ball2.Height)
+            {
+                ballYSpeed *= -1;
+            }
+
+            //check if ball collides with wall
+            if (ball2.X <= 0 && ball2.X < 600 && ball2.Y >= 0)
+            {
+                int xRandom = spaceRandom.Next(1, 600);
+                int yRandom = spaceRandom.Next(1, 450);
+
+                ball2.X = xRandom;
+                ball2.Y = yRandom;
+
+                ballXSpeed *= -1;
+            }
+            if (ball2.Y <= 600 && ball2.Y > 0 && ball2.X >= 600)
+            {
+                int xRandom = spaceRandom.Next(1, 600);
+                int yRandom = spaceRandom.Next(1, 450);
+
+                ball2.X = xRandom;
+                ball2.Y = yRandom;
+
+                ballXSpeed *= -1;
+            }
+            if (ball2.Y < 600 && ball2.Y > 450)
+            {
+                int xRandom = spaceRandom.Next(1, 600);
+                int yRandom = spaceRandom.Next(1, 450);
+
+                ball2.X = xRandom;
+                ball2.Y = yRandom;
+
+                ballXSpeed *= -1;
+            }
+
+            //check if ball collides with a player
+            if (ball2.IntersectsWith(player1))
+            {
+                player1Score = player1Score - 1;
+                int xRandom = spaceRandom.Next(1, 600);
+                int yRandom = spaceRandom.Next(1, 450);
+
+                ball2.X = xRandom;
+                ball2.Y = yRandom;
+
+                ballXSpeed *= -1;
+            }
+            if (ball2.IntersectsWith(player2))
+            {
+                player2Score = player2Score - 1;
+                int xRandom = spaceRandom.Next(1, 600);
+                int yRandom = spaceRandom.Next(1, 450);
+
+                ball2.X = xRandom;
+                ball2.Y = yRandom;
+
+                ballXSpeed *= -1;
             }
 
             //move player 1 
@@ -221,7 +400,6 @@ namespace Square_Chaser
                 
                 player1Score = player1Score + 1;
                 player1scoreOutput.Text = $"{player1Score}";
-                //clear the drawing
                 int xRandom = spaceRandom.Next(1, 600);
                 int yRandom = spaceRandom.Next(1, 450);
                 point = new Rectangle(xRandom, yRandom, 7, 7);
@@ -276,6 +454,9 @@ namespace Square_Chaser
                 int yRandom = spaceRandom.Next(1, 450);
                 doomOrb = new Rectangle(xRandom, yRandom, 7, 7);
             }
+            //Move powerups
+            ball.X += powerupXspeed;
+            ball.Y += powerupYspeed;
 
             //check for player speed dropping under 1
             if (player1Speed < 1)
@@ -285,6 +466,21 @@ namespace Square_Chaser
             if (player2Speed < 1)
             {
                 winLabel.Text = $"player 1 wins to speed";
+            }
+
+            //check for player score dropping under 0
+
+            if(player1Score <= 0)
+            {
+                winLabel.Text = "player 2 wins to score";
+                Thread.Sleep(3000);
+                Application.Exit();
+            }
+            if (player2Score <= 0)
+            {
+                winLabel.Text = "player 1 wins to score";
+                Thread.Sleep(3000);
+                Application.Exit();
             }
 
 
@@ -314,7 +510,7 @@ namespace Square_Chaser
             e.Graphics.FillRectangle(redBrush, doomOrb);
             e.Graphics.FillRectangle(yellowBrush, speedOrb);
             e.Graphics.FillRectangle(redBrush, ball);
-
+            e.Graphics.FillRectangle(redBrush, ball2);
         }
 
         private void player1scoreLabel_DoubleClick(object sender, EventArgs e)

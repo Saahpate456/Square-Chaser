@@ -33,6 +33,7 @@
             this.player2scoreOutput = new System.Windows.Forms.Label();
             this.gameTimer = new System.Windows.Forms.Timer(this.components);
             this.winLabel = new System.Windows.Forms.Label();
+            this.labelOutput = new System.Windows.Forms.Label();
             this.SuspendLayout();
             // 
             // player1scoreOutput
@@ -69,10 +70,19 @@
             // 
             this.winLabel.AutoSize = true;
             this.winLabel.BackColor = System.Drawing.Color.Black;
+            this.winLabel.ForeColor = System.Drawing.SystemColors.ControlText;
             this.winLabel.Location = new System.Drawing.Point(238, 156);
             this.winLabel.Name = "winLabel";
             this.winLabel.Size = new System.Drawing.Size(0, 13);
             this.winLabel.TabIndex = 5;
+            // 
+            // labelOutput
+            // 
+            this.labelOutput.AutoSize = true;
+            this.labelOutput.Location = new System.Drawing.Point(417, 167);
+            this.labelOutput.Name = "labelOutput";
+            this.labelOutput.Size = new System.Drawing.Size(0, 13);
+            this.labelOutput.TabIndex = 6;
             // 
             // Form1
             // 
@@ -80,6 +90,7 @@
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.SystemColors.ButtonHighlight;
             this.ClientSize = new System.Drawing.Size(600, 450);
+            this.Controls.Add(this.labelOutput);
             this.Controls.Add(this.winLabel);
             this.Controls.Add(this.player2scoreOutput);
             this.Controls.Add(this.player1scoreOutput);
@@ -101,6 +112,7 @@
         private System.Windows.Forms.Label player2scoreOutput;
         private System.Windows.Forms.Timer gameTimer;
         private System.Windows.Forms.Label winLabel;
+        private System.Windows.Forms.Label labelOutput;
     }
 }
 
